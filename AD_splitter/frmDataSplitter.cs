@@ -118,7 +118,8 @@ namespace AD_Splitter
 
                 string FileSectionName = CleanFileName(subSections[0]);
 
-                string PrefixPart = GetPrefixPart(i + 1);
+                // i+1 => MAKE NUMBERING IN AD_SPLITTER STARTS 0001 NOT 0000 WHICH IS CURRENTLY
+                string PrefixPart = GetPrefixPart(i + 1); 
 
                 //add prefix
                 FileSectionName = String.Format("{0}-{1}", PrefixPart, FileSectionName);

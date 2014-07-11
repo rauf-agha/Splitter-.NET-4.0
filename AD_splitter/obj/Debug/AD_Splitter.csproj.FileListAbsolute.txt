@@ -9,3 +9,6 @@ C:\Dev\LDAP\AD_splitter\bin\Debug\GoogleTranslateAPI.xml
 C:\Dev\LDAP\AD_splitter\obj\Debug\AD_Splitter.exe
 C:\Dev\LDAP\AD_splitter\obj\Debug\AD_Splitter.pdb
 C:\Dev\LDAP\AD_splitter\obj\Debug\AD_Splitter.csprojResolveAssemblyReference.cache
+C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\bin\Debug\AD_Splitter.exe.config
+C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\obj\Debug\AD_Splitter.exe
+C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\obj\Debug\AD_Splitter.pdb
