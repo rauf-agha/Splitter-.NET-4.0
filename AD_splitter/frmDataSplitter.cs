@@ -82,11 +82,6 @@ namespace AD_Splitter
 
         string FileExtension = "txt";
 
-        /// <summary>
-        /// Start Task action
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void cmdStart_Click(object sender, EventArgs e)
         {
             if (txtOutFolder4Split.Text.Trim() == "")
@@ -142,7 +137,6 @@ namespace AD_Splitter
                 else // insert topic file names and links in the TOC file
                 {
                     StreamWriter trTOC = new StreamWriter(TOCIndexFileName, true,Encoding.Default);
-                    //string strLinkText = PrefixPart + "-" + FileSectionName + "." + FileExtension;
                     string strLinkText = String.Format("{0}.{1}", FileSectionName, FileExtension);
                     trTOC.WriteLine(String.Format("<a href='{0}'>{0}</a> <br/>", strLinkText));
                     trTOC.Close();
@@ -152,23 +146,7 @@ namespace AD_Splitter
                 //write data lines to HTML file or text file
                 if (chkHTML.Checked)
                 {
-                    tr.WriteLine("<html> <body>");
-                    tr.WriteLine(String.Format("<a href='{0}'>Home</a> <br/>", Path.GetFileName(TOCIndexFileName))); // Link to Home- TOC file at top
-                    tr.WriteLine(String.Format("<h1>{0}</h1>", subSections[0]));                    
-
-                    for (int j = 0; j < subSections.Length; j++)
-                    {
-                        tr.WriteLine("<br/>");
-                        tr.WriteLine(subSections[j]);
-                    }
-
-                    if (i == 0)
-                        tr.WriteLine("<br/>");
-                    
-                    else // Link to Home Page 0000
-                        tr.WriteLine(String.Format("<br/> <a href='{0}'>Home</a> <br/>", Path.GetFileName(TOCIndexFileName))); // Link to Home- TOC file at bottom
-
-                    tr.WriteLine("</body></html>");
+                    WriteLinesToHTMLFile(tr, TOCIndexFileName, i, subSections);
                 }
 
                 else
@@ -181,6 +159,27 @@ namespace AD_Splitter
             }
 
             MessageBox.Show("Task Completed", "bismillah", MessageBoxButtons.OK);
+        }
+
+        private void WriteLinesToHTMLFile(TextWriter tr, string TOCIndexFileName, int i, string[] subSections)
+        {
+            tr.WriteLine("<html> <body>");
+            tr.WriteLine(String.Format("<a href='{0}'>Home</a> <br/>", Path.GetFileName(TOCIndexFileName))); // Link to Home- TOC file at top
+            tr.WriteLine(String.Format("<h1>{0}</h1>", subSections[0]));
+
+            for (int j = 0; j < subSections.Length; j++)
+            {
+                tr.WriteLine("<br/>");
+                tr.WriteLine(subSections[j]);
+            }
+
+            if (i == 0)
+                tr.WriteLine("<br/>");
+
+            else // Link to Home Page 0000
+                tr.WriteLine(String.Format("<br/> <a href='{0}'>Home</a> <br/>", Path.GetFileName(TOCIndexFileName))); // Link to Home- TOC file at bottom
+
+            tr.WriteLine("</body></html>");
         }
 
         private string RemoveMultipleBlankLines(string input)
@@ -205,13 +204,13 @@ namespace AD_Splitter
             
         }
 
-        private string CleanFileName(string p)
+        private string CleanFileName(string fileName)
         {
-            if (p == null || p.Length == 0)
+            if (fileName == null || fileName.Length == 0)
                 return "";
 
             StringBuilder sb = new StringBuilder();
-            foreach (char c in p)  {
+            foreach (char c in fileName)  {
                 if (Char.IsLetter(c) || char.IsWhiteSpace(c))
                 {
                     sb.Append(c);
