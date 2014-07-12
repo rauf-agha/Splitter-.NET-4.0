@@ -128,7 +128,7 @@ namespace AD_Splitter
                 }
 
                 OutFileName = String.Format("{0}\\{1}.{2}", txtOutFolder4Split.Text, FileSectionName, FileExtension);
-                tr = new StreamWriter(OutFileName);
+                tr = new StreamWriter(OutFileName, append: false, encoding: Encoding.UTF8);
 
                 if (i == 0) // save TOC file name
                 {
@@ -136,7 +136,7 @@ namespace AD_Splitter
                 }
                 else // insert topic file names and links in the TOC file
                 {
-                    StreamWriter trTOC = new StreamWriter(TOCIndexFileName, true,Encoding.Default);
+                    StreamWriter trTOC = new StreamWriter(TOCIndexFileName, true, Encoding.Default);
                     string strLinkText = String.Format("{0}.{1}", FileSectionName, FileExtension);
                     trTOC.WriteLine(String.Format("<a href='{0}'>{0}</a> <br/>", strLinkText));
                     trTOC.Close();
