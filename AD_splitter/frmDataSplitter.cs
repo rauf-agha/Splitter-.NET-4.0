@@ -164,7 +164,9 @@ namespace AD_Splitter
         private void WriteLinesToHTMLFile(TextWriter tr, string TOCIndexFileName, int i, string[] subSections)
         {
             tr.WriteLine("<html> <body>");
-            tr.WriteLine(String.Format("<a href='{0}'>Home</a> <br/>", Path.GetFileName(TOCIndexFileName))); // Link to Home- TOC file at top
+            // Link to Home- TOC file at top
+            tr.WriteLine(String.Format("<a href='{0}'>Home</a> <br/>", Path.GetFileName(TOCIndexFileName))); 
+            
             tr.WriteLine(String.Format("<h1>{0}</h1>", subSections[0]));
 
             for (int j = 0; j < subSections.Length; j++)
