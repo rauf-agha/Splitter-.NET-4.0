@@ -21,6 +21,29 @@ namespace AD_Splitter
             InitializeComponent();
         }
 
+        private void cmdStart_Click(object sender, EventArgs e)
+        {
+            if (txtOutFolder4Split.Text.Trim() == "")
+            {
+                MessageBox.Show("Please specify Destination Folder Path first, Thank you.");
+                return;
+            }
+
+            SaveConfigSettings();
+
+            if (chkHTML.Checked)
+            {
+                var processor = new LineProcessor();
+                processor.ProcessLineByLine(txtFileName.Text, txtPrefix.Text, txtOutFolder4Split.Text, txtSplitChar.Text);
+            }
+            else
+            {
+                RunOldCode();
+            }
+
+            MessageBox.Show("Task Completed", "bismillah", MessageBoxButtons.OK);
+        }
+
         private void aLLAHcomMuhammadcomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("iexplore.exe", "www.allah.com");
@@ -33,9 +56,7 @@ namespace AD_Splitter
 
         private void button1_Click(object sender, EventArgs e)
         {
-            txtFileName.Text = LoadFileDialogBox();
-
-            LoadFile(txtFileName.Text);
+            txtFileName.Text = LoadFileDialogBox();            
         }
 
         private string LoadFileDialogBox()
@@ -53,7 +74,7 @@ namespace AD_Splitter
         /// <summary>
         /// Load Input File for reading
         /// </summary>
-        private void LoadFile(string FileName)
+        private void LoadFileSplitLines(string FileName)
         {
             if (FileName == "") return;
 
@@ -82,17 +103,12 @@ namespace AD_Splitter
 
         string FileExtension = "txt";
 
-        private void cmdStart_Click(object sender, EventArgs e)
+        
+
+        private void RunOldCode()
         {
-            if (txtOutFolder4Split.Text.Trim() == "")
-            {
-                MessageBox.Show("Please specify Destination Folder Path first, Thank you.");
-                return;
-            }
-            SaveConfigSettings();
-
+            LoadFileSplitLines(txtFileName.Text);
             FileExtension = chkHTML.Checked ? "html" : "txt";
-
             if (sections == null || sections.Length == 0)
             {
                 MessageBox.Show("File not read properly. File Name: " + txtFileName.Text);
@@ -103,7 +119,7 @@ namespace AD_Splitter
             string OutFileName = "";
             string TOCIndexFileName = "";
 
-       
+
             for (int i = 0; i < sections.Length; i++)
             {
 
@@ -114,7 +130,7 @@ namespace AD_Splitter
                 string FileSectionName = CleanFileName(subSections[0]);
 
                 // i+1 => MAKE NUMBERING IN AD_SPLITTER STARTS 0001 NOT 0000 WHICH IS CURRENTLY
-                string PrefixPart = GetPrefixPart(i + 1); 
+                string PrefixPart = GetPrefixPart(txtPrefix.Text, i + 1);
 
                 //add prefix
                 FileSectionName = String.Format("{0}-{1}", PrefixPart, FileSectionName);
@@ -122,7 +138,7 @@ namespace AD_Splitter
                 if (FileSectionName.Length + txtOutFolder4Split.Text.Length > 250)
                 {
                     int CutLength = 255 - txtOutFolder4Split.Text.Length;
-                    
+
                     if (CutLength > 0 && FileSectionName.Length > CutLength)
                         FileSectionName = FileSectionName.Substring(0, CutLength);
                 }
@@ -142,7 +158,7 @@ namespace AD_Splitter
                     trTOC.Close();
                 }
 
-                
+
                 //write data lines to HTML file or text file
                 if (chkHTML.Checked)
                 {
@@ -151,15 +167,16 @@ namespace AD_Splitter
 
                 else
                 { // only text files
-                    
+
                     tr.WriteLine(RemoveMultipleBlankLines(sections[i]));
                 }
 
                 tr.Close();
             }
-
-            MessageBox.Show("Task Completed", "bismillah", MessageBoxButtons.OK);
         }
+
+     
+       
 
         private void WriteLinesToHTMLFile(TextWriter tr, string TOCIndexFileName, int i, string[] subSections)
         {
@@ -193,32 +210,26 @@ namespace AD_Splitter
             return input;
         }
 
-        private string GetPrefixPart(int Count)
+        private string GetPrefixPart(string prefix, int Count)
         {
             if (Count < 10)
-                return String.Format("{0}000{1}", txtPrefix.Text, Count);
+                return String.Format("{0}000{1}", prefix, Count);
             else if (Count < 100)
-                return String.Format("{0}00{1}", txtPrefix.Text, Count);
+                return String.Format("{0}00{1}", prefix, Count);
             else if (Count < 1000)
-                return String.Format("{0}0{1}", txtPrefix.Text, Count);
+                return String.Format("{0}0{1}", prefix, Count);
             else
-                return txtPrefix.Text + Count;
+                return prefix + Count;
             
         }
 
         private string CleanFileName(string fileName)
         {
-            if (fileName == null || fileName.Length == 0)
-                return "";
-
-            StringBuilder sb = new StringBuilder();
-            foreach (char c in fileName)  {
-                if (Char.IsLetter(c) || char.IsWhiteSpace(c))
-                {
-                    sb.Append(c);
-                }
-            }
-
+            if (fileName == null || fileName.Length == 0) return string.Empty;
+            var sb = new StringBuilder();
+            foreach (char c in fileName)
+                if (Char.IsLetter(c) || char.IsWhiteSpace(c))     
+                    sb.Append(c);                           
             return sb.ToString().Trim();
         }
 

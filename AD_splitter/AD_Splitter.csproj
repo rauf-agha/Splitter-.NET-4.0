@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\LineProcessor.cs" />
     <Compile Include="frmDataSplitter.cs">
       <SubType>Form</SubType>
     </Compile>
