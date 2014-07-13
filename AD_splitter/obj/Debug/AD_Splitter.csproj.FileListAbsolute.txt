@@ -19,3 +19,4 @@ C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\obj\Debug\AD_Splitter.Properties.Resou
 C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\obj\Debug\AD_Splitter.csproj.GenerateResource.Cache
 C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\obj\Debug\AD_Splitter.exe
 C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\obj\Debug\AD_Splitter.pdb
+C:\Dev\LDAP\Splitter-.NET-4.0\AD_splitter\obj\Debug\AD_Splitter.csprojResolveAssemblyReference.cache

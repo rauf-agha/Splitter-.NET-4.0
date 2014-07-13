@@ -57,7 +57,9 @@ namespace AD_Splitter
                 childFile.WriteLine(@"</body> 
                                                  </html>");
                 childFile.Close();
-                indexFile.WriteLine(String.Format("<a href='{0}'>{0}</a> <br/>", Path.GetFileName(childFileName)));
+
+                //insert link in index file
+                indexFile.WriteLine(String.Format("<a target='_blank' href='{0}'>{0}</a> <br/>", Path.GetFileName(childFileName)));
             }
         }
 
