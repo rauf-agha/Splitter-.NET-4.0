@@ -25,15 +25,12 @@ namespace AD_Splitter
 
                     ClosePreviousChildFile(indexFileName, indexFile, childFile, childFileName);
                     //create new child file
-                    childFileName = Path.Combine(outputFolder,
-                                                String.Format("{0}-{1}.html",
-                                                GetPrefixPart(indexFileName, ++fileCount),
-                                                CleanFileName(line)));
+                    childFileName = GetChildFileName(indexFileName, outputFolder, ref fileCount, line);
                     childFile = new StreamWriter(childFileName, append: true, encoding: Encoding.UTF8);
                     childFile.WriteLine(@"<html> 
                                             <body>");
                     // Link to Home- TOC file at top
-                    childFile.WriteLine(String.Format("<a href='{0}'>Home</a> <br/>", indexFileName + ".html"));
+                    childFile.WriteLine(String.Format("<a target='_index' href='{0}'>Home</a> <br/>", indexFileName + ".html"));
                     childFile.WriteLine(String.Format("<h1>{0}</h1>", line.Replace(separator, "")));
                 }
                 else // keep writing to newly created child file
@@ -41,7 +38,6 @@ namespace AD_Splitter
                     childFile.WriteLine("<br />" + line);
                 }
             }
-
             ClosePreviousChildFile(indexFileName, indexFile, childFile, childFileName);
 
             indexFile.WriteLine(@"</body> 
@@ -49,17 +45,35 @@ namespace AD_Splitter
             indexFile.Close();
         }
 
+        private string GetChildFileName(string indexFileName, string outputFolder, ref int fileCount, string line)
+        {
+            string fileName = String.Format("{0}-{1}.html",
+                                        GetPrefixPart(indexFileName, ++fileCount),
+                                        CleanFileName(line));
+            if (fileName.Length + outputFolder.Length > 250)
+            {
+                int CutLength = 255 - outputFolder.Length;
+
+                if (CutLength > 0 && fileName.Length > CutLength)
+                    fileName = fileName.Substring(0, CutLength);
+            }
+
+            fileName = Path.Combine(outputFolder, fileName);
+            return fileName;
+        }
+
         private void ClosePreviousChildFile(string indexFileName, StreamWriter indexFile, StreamWriter childFile, string childFileName)
         {
             if (childFile != null) //close previous child file
             {
-                childFile.WriteLine(String.Format("<a href='{0}'>Home</a> <br/>", indexFileName + ".html"));
+                childFile.WriteLine(String.Format("<a target='_index' href='{0}'>Home</a> <br/>", indexFileName + ".html"));
                 childFile.WriteLine(@"</body> 
                                                  </html>");
                 childFile.Close();
 
                 //insert link in index file
-                indexFile.WriteLine(String.Format("<a target='_blank' href='{0}'>{0}</a> <br/>", Path.GetFileName(childFileName)));
+                indexFile.WriteLine(String.Format("<a target='{0}'" + "href='{0}'>{0}</a> <br/>", 
+                                    Path.GetFileName(childFileName)));
             }
         }
 
