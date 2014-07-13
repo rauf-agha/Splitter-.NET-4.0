@@ -12,6 +12,11 @@ namespace AD_Splitter
         {
             StreamWriter indexFile = new StreamWriter(Path.Combine(outputFolder, indexFileName + ".html"), true, Encoding.UTF8);
             indexFile.WriteLine(@"<html> 
+                                    <head>
+                                        <meta http-equiv=""content-type"" content=""text/html; charset=UTF-8""> 
+                                        <link rel=""stylesheet"" type=""text/css"" href=""css/index.css"">   
+                                        <title>" + indexFileName + @" | Content </title>                                         
+                                    </head>
                                     <body> 
                                         <h1>Content</h1>
                                         <br />");
@@ -27,11 +32,7 @@ namespace AD_Splitter
                     //create new child file
                     childFileName = GetChildFileName(indexFileName, outputFolder, ref fileCount, line);
                     childFile = new StreamWriter(childFileName, append: true, encoding: Encoding.UTF8);
-                    childFile.WriteLine(@"<html> 
-                                            <body>");
-                    // Link to Home- TOC file at top
-                    childFile.WriteLine(String.Format("<a target='_index' href='{0}'>Home</a> <br/>", indexFileName + ".html"));
-                    childFile.WriteLine(String.Format("<h1>{0}</h1>", line.Replace(separator, "")));
+                    CreateNewChildFile(indexFileName, childFile, line.Replace(separator, ""));
                 }
                 else // keep writing to newly created child file
                 {
@@ -45,10 +46,26 @@ namespace AD_Splitter
             indexFile.Close();
         }
 
-        private string GetChildFileName(string indexFileName, string outputFolder, ref int fileCount, string line)
+        private void CreateNewChildFile(string indexFileName, StreamWriter childFile, string line)
+        {
+            childFile.WriteLine(@"<html> 
+                                  <head>
+                                    <meta http-equiv=""content-type"" content=""text/html; charset=UTF-8"">
+                                    <title>"+ line + @"</title>
+                                    <link rel=""stylesheet"" type=""text/css"" href=""css/child.css"">  
+                                    <script src=""/js/audio-player.js"" type=""text/javascript""></script>
+                                    <script src=""/js/quran_audio.js"" type=""text/javascript""></script>  
+                                  </head>
+                                            <body>");
+            // Link to Home- TOC file at top
+            childFile.WriteLine(String.Format("<a target='_index' href='{0}'>Home</a> <br/>", indexFileName + ".html"));
+            childFile.WriteLine(String.Format("<h1>{0}</h1>", line));
+        }
+
+        private string GetChildFileName(string prefixText, string outputFolder, ref int fileCount, string line)
         {
             string fileName = String.Format("{0}-{1}.html",
-                                        GetPrefixPart(indexFileName, ++fileCount),
+                                        GetPrefixPart(prefixText, ++fileCount),
                                         CleanFileName(line));
             if (fileName.Length + outputFolder.Length > 250)
             {
@@ -66,7 +83,7 @@ namespace AD_Splitter
         {
             if (childFile != null) //close previous child file
             {
-                childFile.WriteLine(String.Format("<a target='_index' href='{0}'>Home</a> <br/>", indexFileName + ".html"));
+                childFile.WriteLine(String.Format("<br/> <a target='_index' href='{0}'>Home</a> <br/>", indexFileName + ".html"));
                 childFile.WriteLine(@"</body> 
                                                  </html>");
                 childFile.Close();
@@ -109,7 +126,7 @@ namespace AD_Splitter
             if (fileName == null || fileName.Length == 0) return string.Empty;
             var sb = new StringBuilder();
             foreach (char c in fileName)
-                if (Char.IsLetter(c) || char.IsWhiteSpace(c))
+                if (Char.IsLetter(c) || c == ' ')
                     sb.Append(c);
             return sb.ToString().Trim();
         }
