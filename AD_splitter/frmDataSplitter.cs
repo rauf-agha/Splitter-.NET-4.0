@@ -41,7 +41,7 @@ namespace AD_Splitter
                 RunOldCode();
             }
 
-            MessageBox.Show("Task Completed", "bismillah", MessageBoxButtons.OK);
+            MessageBox.Show("Split Task Completed, Please check output folder.", "bismillah", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void aLLAHcomMuhammadcomToolStripMenuItem_Click(object sender, EventArgs e)
@@ -70,10 +70,7 @@ namespace AD_Splitter
         }
 
         string[] sections;
-
-        /// <summary>
-        /// Load Input File for reading
-        /// </summary>
+        
         private void LoadFileSplitLines(string FileName)
         {
             if (FileName == "") return;
@@ -100,10 +97,10 @@ namespace AD_Splitter
             return "";
 
         }
-
-        string FileExtension = "txt";
-
-        
+		
+		#region Old Legacy Code still used for translation and Text file generation, not HTML though
+		
+		string FileExtension = "txt";        
 
         private void RunOldCode()
         {
@@ -581,9 +578,11 @@ namespace AD_Splitter
         private void lnkSplitOutFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("explorer", txtOutFolder4Split.Text);
-        }
-        
-    }
+		}
+
+		#endregion
+
+	}
 }
 
 
