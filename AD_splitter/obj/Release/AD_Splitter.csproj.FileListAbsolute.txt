@@ -1,1 +1,0 @@
-C:\Dev\LDAP\AD_splitter\bin\Release2\AD_Splitter.exe.config
