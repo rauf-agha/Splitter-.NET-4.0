@@ -32,7 +32,7 @@ namespace AD_Splitter
             if (chkHTML.Checked)
             {
                 var processor = new LineProcessor();
-                processor.ProcessLineByLine(txtFileName.Text, txtPrefix.Text, txtOutFolder4Split.Text, txtSplitChar.Text);
+                processor.ProcessLineByLine(txtFileName.Text, txtOutFolder4Split.Text, txtSplitChar.Text);
             }
             else
             {

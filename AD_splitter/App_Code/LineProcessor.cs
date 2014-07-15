@@ -8,14 +8,18 @@ namespace AD_Splitter
 {
     class LineProcessor
     {
-        public void ProcessLineByLine(string inputFile, string indexFileName, string outputFolder, string separator)
+		private string _indexFileName;		
+        public void ProcessLineByLine(string inputFile, string outputFolder, string separator)
         {
-            StreamWriter indexFile = new StreamWriter(Path.Combine(outputFolder, indexFileName + ".html"), true, Encoding.UTF8);
+			_indexFileName = Path.GetFileNameWithoutExtension(inputFile).
+							 Trim().
+							 Replace(" ", "_");
+            StreamWriter indexFile = new StreamWriter(Path.Combine(outputFolder, _indexFileName + ".html"), true, Encoding.UTF8);
             indexFile.WriteLine(@"<html> 
                                     <head>
                                         <meta http-equiv=""content-type"" content=""text/html; charset=UTF-8""> 
                                         <link rel=""stylesheet"" type=""text/css"" href=""css/index.css"">   
-                                        <title>" + indexFileName + @" | Content </title>                                         
+                                        <title>" + _indexFileName + @" | Content </title>                                         
                                     </head>
                                     <body> 
                                         <h1>Content</h1>
@@ -28,18 +32,18 @@ namespace AD_Splitter
                 if (line.StartsWith(separator)) //new child file
                 {
 
-                    ClosePreviousChildFile(indexFileName, indexFile, childFile, childFileName);
+                    ClosePreviousChildFile(_indexFileName, indexFile, childFile, childFileName);
                     //create new child file
-                    childFileName = GetChildFileName(indexFileName, outputFolder, ref fileCount, line);
+                    childFileName = GetChildFileName(_indexFileName, outputFolder, ref fileCount, line);
                     childFile = new StreamWriter(childFileName, append: true, encoding: Encoding.UTF8);
-                    CreateNewChildFile(indexFileName, childFile, line.Replace(separator, ""));
+                    CreateNewChildFile(_indexFileName, childFile, line.Replace(separator, ""));
                 }
                 else // keep writing to newly created child file
                 {
                     childFile.WriteLine("<br />" + line);
                 }
             }
-            ClosePreviousChildFile(indexFileName, indexFile, childFile, childFileName);
+            ClosePreviousChildFile(_indexFileName, indexFile, childFile, childFileName);
 
             indexFile.WriteLine(@"</body> 
                                     </html>");
