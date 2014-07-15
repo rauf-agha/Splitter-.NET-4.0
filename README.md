@@ -3,7 +3,7 @@ Splitter-.NET-4.0
 
 Splitter-.NET-4.0 using Google Translate API (old version) and Microsoft Translate API
 
-Built using VS 2013 Ultimate Edition
+Built using VS 2013 Ultimate Edition. (Works in VS 2012 as well)
 
 Should open in VS 2013 Express Edition as well.
 
